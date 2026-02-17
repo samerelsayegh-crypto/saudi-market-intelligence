@@ -344,11 +344,16 @@ with tab3:
         deadline_str = t["deadline"].strftime("%b %d, %Y") if pd.notna(t["deadline"]) else "TBD"
         days_left_str = f"{t['days_left']}d left" if t["days_left"] > 0 else "Expired"
         
+        source_url = t.get('source_url', '')
+        source_label = t.get('source', 'Source')
+        
         st.markdown(f"""
-        <div class="project-card">
+        <div class="project-card" style="cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(197,165,90,0.15)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
             <div style="display: flex; justify-content: space-between; align-items: start;">
                 <div>
-                    <div class="project-name">{t['title']}</div>
+                    <a href="{source_url}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                        <div class="project-name" style="transition: color 0.2s;" onmouseover="this.style.color='#C5A55A';" onmouseout="this.style.color='inherit';">{t['title']}</div>
+                    </a>
                     <div class="project-developer">{t['entity']} • {t['region']}</div>
                 </div>
                 <span class="status-badge {status_class}">{status_emoji} {t['status']}</span>
@@ -375,6 +380,10 @@ with tab3:
                     <div class="stat-label">ID</div>
                     <div class="stat-value" style="font-family: monospace; font-size: 12px;">{t['id']}</div>
                 </div>
+            </div>
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(197,165,90,0.15); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 11px; color: #64748b;">📄 Source: {source_label}</span>
+                <a href="{source_url}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; background: linear-gradient(135deg, #C5A55A, #a88b3d); color: #0a1628; font-size: 12px; font-weight: 600; border-radius: 6px; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.85';" onmouseout="this.style.opacity='1';">🔗 View Source →</a>
             </div>
         </div>
         """, unsafe_allow_html=True)
